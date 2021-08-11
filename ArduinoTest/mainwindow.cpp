@@ -327,6 +327,9 @@ void MainWindow::on_enableSavingButton_clicked()
     // Update button status
     m_ui->enableSavingButton->setEnabled(false);
     m_ui->disableSavingButton->setEnabled(true);
+    m_ui->cbQuaternions->setEnabled(false);
+    m_ui->cbRaw->setEnabled(false);
+    m_ui->cbRPY->setEnabled(false);
     readyToSave = true;
 
 
@@ -347,6 +350,9 @@ void MainWindow::on_disableSavingButton_clicked()
 {
     m_ui->enableSavingButton->setEnabled(true);
     m_ui->disableSavingButton->setEnabled(false);
+    m_ui->cbQuaternions->setEnabled(true);
+    m_ui->cbRaw->setEnabled(true);
+    m_ui->cbRPY->setEnabled(true);
     fileOut.close();
     readyToSave = false;
 

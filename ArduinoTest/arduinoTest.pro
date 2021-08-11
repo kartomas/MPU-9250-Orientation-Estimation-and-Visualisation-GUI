@@ -1,4 +1,4 @@
-QT += widgets serialport charts
+QT += widgets serialport charts printsupport
 requires(qtConfig(combobox))
 
 TARGET = arduinoTest
@@ -8,6 +8,7 @@ SOURCES += \
     graph2d.cpp \
     main.cpp \
     mainwindow.cpp \
+    qcustomplot.cpp \
     settingsdialog.cpp \
     console.cpp \
     geometryengine.cpp \
@@ -16,6 +17,7 @@ SOURCES += \
 HEADERS += \
     graph2d.h \
     mainwindow.h \
+    qcustomplot.h \
     settingsdialog.h \
     console.h \
     geometryengine.h \
