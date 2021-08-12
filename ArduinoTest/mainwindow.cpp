@@ -53,7 +53,6 @@
 #include "ui_mainwindow.h"
 #include "console.h"
 #include "settingsdialog.h"
-#include "graph2d.h"
 #include "viz3D.h"
 #include "datasaver.h"
 
@@ -88,38 +87,39 @@ MainWindow::MainWindow(QWidget *parent) :
     mainWidget = new QWidget;
     mainWidget->setLayout(mainLayout);
 
-    Graph2D *accelGraph = new Graph2D();
-    accelGraph->setTitle("Accelerometer Graph");
-    Graph2D *gyroGraph= new Graph2D();
-    gyroGraph->setTitle("Gyroscope Graph");
-    Graph2D *magGraph= new Graph2D();
-    magGraph->setTitle("Magnetometer Graph");
+//    Graph2D *accelGraph = new Graph2D();
+//    accelGraph->setTitle("Accelerometer Graph");
+//    Graph2D *gyroGraph= new Graph2D();
+//    gyroGraph->setTitle("Gyroscope Graph");
+//    Graph2D *magGraph= new Graph2D();
+//    magGraph->setTitle("Magnetometer Graph");
 
-    accelGraph->legend()->setAlignment(Qt::AlignLeft);
-    accelGraph->layout()->setContentsMargins(0,0,0,0);
-    gyroGraph->legend()->setAlignment(Qt::AlignLeft);
-    gyroGraph->layout()->setContentsMargins(0,0,0,0);
-    magGraph->legend()->setAlignment(Qt::AlignLeft);
-    magGraph->layout()->setContentsMargins(0,0,0,0);
+//    accelGraph->legend()->setAlignment(Qt::AlignLeft);
+//    accelGraph->layout()->setContentsMargins(0,0,0,0);
+//    gyroGraph->legend()->setAlignment(Qt::AlignLeft);
+//    gyroGraph->layout()->setContentsMargins(0,0,0,0);
+//    magGraph->legend()->setAlignment(Qt::AlignLeft);
+//    magGraph->layout()->setContentsMargins(0,0,0,0);
 
-//    accelGraph->legend()->detachFromChart();
-//    accelGraph->legend()->setBackgroundVisible(true);
-//    accelGraph->legend()->setGeometry(QRectF(100,
-//                                             100,
-//                                             100,
-//                                             50));
-//    accelGraph->legend()->update();
-////    chart->legend()->hide();
-    accelGraph->setAnimationOptions(QChart::AllAnimations);
-    m_ui->accelView->setChart(accelGraph);
-//    m_ui->accelView->setRenderHint(QPainter::Antialiasing);
+////    accelGraph->legend()->detachFromChart();
+////    accelGraph->legend()->setBackgroundVisible(true);
+////    accelGraph->legend()->setGeometry(QRectF(100,
+////                                             100,
+////                                             100,
+////                                             50));
+////    accelGraph->legend()->update();
+//////    chart->legend()->hide();
+//    accelGraph->setAnimationOptions(QChart::AllAnimations);
+//    m_ui->accelView->setChart(accelGraph);
+////    m_ui->accelView->setRenderHint(QPainter::Antialiasing);
 
-    gyroGraph->setAnimationOptions(QChart::AllAnimations);
-    m_ui->gyroView->setChart(gyroGraph);
-//    m_ui->gyroView->setRenderHint(QPainter::Antialiasing);
+//    gyroGraph->setAnimationOptions(QChart::AllAnimations);
+//    m_ui->gyroView->setChart(gyroGraph);
+////    m_ui->gyroView->setRenderHint(QPainter::Antialiasing);
 
-    magGraph->setAnimationOptions(QChart::AllAnimations);
-    m_ui->magView->setChart(magGraph);
+//    magGraph->setAnimationOptions(QChart::AllAnimations);
+//    m_ui->magView->setChart(magGraph);
+    setupGraphs();
 
 
 
@@ -132,6 +132,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     initActionsConnections();
 
+
     connect(m_serial, &QSerialPort::errorOccurred, this, &MainWindow::handleError);
 
 //! [2]
@@ -140,9 +141,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_ui->m_console, &Console::getData, this, &MainWindow::writeData);
 
     connect(m_ui->m_console, &Console::sendAllData, this, &MainWindow::writeDatatoFile);
-    connect(m_ui->m_console, &Console::sendAccelData, accelGraph, &Graph2D::updateGraph);
-    connect(m_ui->m_console, &Console::sendGyroData, gyroGraph, &Graph2D::updateGraph);
-    connect(m_ui->m_console, &Console::sendMagData, magGraph, &Graph2D::updateGraph);
+//    connect(m_ui->m_console, &Console::sendAccelData, accelGraph, &Graph2D::updateGraph);
+    connect(m_ui->m_console, &Console::sendGraphData, this, &MainWindow::updateGraphs);
+//    connect(m_ui->m_console, &Console::sendGyroData, gyroGraph, &Graph2D::updateGraph);
+//    connect(m_ui->m_console, &Console::sendMagData, magGraph, &Graph2D::updateGraph);
     connect(m_ui->m_console, &Console::sendRPY, m_ui->openGLWidget, &Viz3D::updateRotation);
 
 //! [3]
@@ -196,6 +198,93 @@ void MainWindow::closeSerialPort()
     showStatusMessage(tr("Disconnected"));
 }
 
+void MainWindow::setupGraphs(){
+    // Accelerometer Graph
+    // Set graphs
+    m_ui->accelGraph->addGraph(); // x
+    m_ui->accelGraph->graph(0)->setPen(QPen(Qt::red,2));
+    m_ui->accelGraph->graph(0)->setName("X");
+    m_ui->accelGraph->addGraph(); // y
+    m_ui->accelGraph->graph(1)->setPen(QPen(Qt::green,2));
+    m_ui->accelGraph->graph(1)->setName("Y");
+    m_ui->accelGraph->addGraph(); // z
+    m_ui->accelGraph->graph(2)->setPen(QPen(Qt::blue,2));
+    m_ui->accelGraph->graph(2)->setName("Z");
+    // Set legend, title and axis names
+    m_ui->accelGraph->legend->setVisible(true);
+    m_ui->accelGraph->setLocale(QLocale(QLocale::English, QLocale::UnitedKingdom));
+    QFont legendFont = QFont("Helvetica", 7);
+    m_ui->accelGraph->legend->setFont(legendFont);
+    m_ui->accelGraph->legend->setSelectedFont(legendFont);
+    m_ui->accelGraph->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignLeft|Qt::AlignTop);
+    m_ui->accelGraph->yAxis->setLabel("mg");
+    m_ui->accelGraph->xAxis->setTickLabels(false);
+    m_ui->accelGraph->plotLayout()->insertRow(0);
+    QCPTextElement *titleAccel = new QCPTextElement(m_ui->accelGraph, "Accelerometer Data", QFont("sans", 10, QFont::Bold));
+    m_ui->accelGraph->plotLayout()->addElement(0, 0, titleAccel);
+    m_ui->accelGraph->legend->setFillOrder(QCPLegend::foColumnsFirst);
+    // Set range
+    m_ui->accelGraph->xAxis->setRange(0, 40);
+    m_ui->accelGraph->yAxis->setRange(-1, 1);
+
+    // Gyroscope Graph
+    // Set graphs
+    m_ui->gyroGraph->addGraph(); // x
+    m_ui->gyroGraph->graph(0)->setPen(QPen(Qt::red,2));
+    m_ui->gyroGraph->graph(0)->setName("X");
+    m_ui->gyroGraph->addGraph(); // y
+    m_ui->gyroGraph->graph(1)->setPen(QPen(Qt::green,2));
+    m_ui->gyroGraph->graph(1)->setName("Y");
+    m_ui->gyroGraph->addGraph(); // z
+    m_ui->gyroGraph->graph(2)->setPen(QPen(Qt::blue,2));
+    m_ui->gyroGraph->graph(2)->setName("Z");
+    // Set legend, title and axis names
+    m_ui->gyroGraph->legend->setVisible(true);
+    m_ui->gyroGraph->setLocale(QLocale(QLocale::English, QLocale::UnitedKingdom));
+    m_ui->gyroGraph->legend->setFont(legendFont);
+    m_ui->gyroGraph->legend->setSelectedFont(legendFont);
+    m_ui->gyroGraph->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignLeft|Qt::AlignTop);
+    m_ui->gyroGraph->yAxis->setLabel("deg/s");
+    m_ui->gyroGraph->xAxis->setTickLabels(false);
+    m_ui->gyroGraph->plotLayout()->insertRow(0);
+    QCPTextElement *titleGyro = new QCPTextElement(m_ui->gyroGraph, "Gyroscope Data", QFont("sans", 10, QFont::Bold));
+    m_ui->gyroGraph->plotLayout()->addElement(0, 0, titleGyro);
+    m_ui->gyroGraph->legend->setFillOrder(QCPLegend::foColumnsFirst);
+    // Set range
+    m_ui->gyroGraph->xAxis->setRange(0, 40);
+    m_ui->gyroGraph->yAxis->setRange(-1, 1);
+
+    // Gyroscope Graph
+    // Set graphs
+    m_ui->magGraph->addGraph(); // x
+    m_ui->magGraph->graph(0)->setPen(QPen(Qt::red,2));
+    m_ui->magGraph->graph(0)->setName("X");
+    m_ui->magGraph->addGraph(); // y
+    m_ui->magGraph->graph(1)->setPen(QPen(Qt::green,2));
+    m_ui->magGraph->graph(1)->setName("Y");
+    m_ui->magGraph->addGraph(); // z
+    m_ui->magGraph->graph(2)->setPen(QPen(Qt::blue,2));
+    m_ui->magGraph->graph(2)->setName("Z");
+    // Set legend, title and axis names
+    m_ui->magGraph->legend->setVisible(true);
+    m_ui->magGraph->setLocale(QLocale(QLocale::English, QLocale::UnitedKingdom));
+    m_ui->magGraph->legend->setFont(legendFont);
+    m_ui->magGraph->legend->setSelectedFont(legendFont);
+    m_ui->magGraph->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignLeft|Qt::AlignTop);
+    m_ui->magGraph->yAxis->setLabel("mG");
+    m_ui->magGraph->xAxis->setTickLabels(false);
+    m_ui->magGraph->plotLayout()->insertRow(0);
+    QCPTextElement *titleMag = new QCPTextElement(m_ui->magGraph, "Magnetometer Data", QFont("sans", 10, QFont::Bold));
+    m_ui->magGraph->plotLayout()->addElement(0, 0, titleMag);
+    m_ui->magGraph->legend->setFillOrder(QCPLegend::foColumnsFirst);
+    // Set range
+    m_ui->magGraph->xAxis->setRange(0, 40);
+    m_ui->magGraph->yAxis->setRange(-1, 1);
+
+
+
+}
+
 void MainWindow::writeDatatoFile(double ax, double ay, double az,
                            double gx, double gy, double gz,
                            double mx, double my, double mz,
@@ -217,11 +306,7 @@ void MainWindow::writeDatatoFile(double ax, double ay, double az,
              fileOut << roll <<","<<pitch<<","<<yaw;
         }
         fileOut <<std::endl;
-
-
     }
-
-
 }
 //! [5]
 
@@ -272,6 +357,46 @@ void MainWindow::initActionsConnections()
 void MainWindow::showStatusMessage(const QString &message)
 {
     m_status->setText(message);
+}
+
+void MainWindow::updateGraphs(double ax, double ay, double az,
+                              double gx, double gy, double gz,
+                              double mx, double my, double mz,
+                              double yaw, double pitch, double roll
+                              ){
+    // Update Accelerometer Graph
+    m_ui->accelGraph->graph(0)->addData(key,ax);
+    m_ui->accelGraph->graph(1)->addData(key,ay);
+    m_ui->accelGraph->graph(2)->addData(key,az);
+
+    m_ui->accelGraph->xAxis->setRange(key, 40, Qt::AlignRight);
+    m_ui->accelGraph->yAxis->rescale(true);
+
+    m_ui->accelGraph->replot();
+
+    // Update Gyroscope Graph
+    m_ui->gyroGraph->graph(0)->addData(key,gx);
+    m_ui->gyroGraph->graph(1)->addData(key,gy);
+    m_ui->gyroGraph->graph(2)->addData(key,gz);
+
+    m_ui->gyroGraph->xAxis->setRange(key, 40, Qt::AlignRight);
+    m_ui->gyroGraph->yAxis->rescale(true);
+
+    m_ui->gyroGraph->replot();
+
+    // Update Magnetometer Graph
+    m_ui->magGraph->graph(0)->addData(key,mx);
+    m_ui->magGraph->graph(1)->addData(key,my);
+    m_ui->magGraph->graph(2)->addData(key,mz);
+
+    m_ui->magGraph->xAxis->setRange(key, 40, Qt::AlignRight);
+    m_ui->magGraph->yAxis->rescale(true);
+
+    m_ui->magGraph->replot();
+
+    // Increase x value
+    key++;
+
 }
 
 void MainWindow::on_enableSavingButton_clicked()

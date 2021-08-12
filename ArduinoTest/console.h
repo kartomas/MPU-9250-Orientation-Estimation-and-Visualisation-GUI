@@ -71,6 +71,11 @@ signals:
                      double yaw, double pitch, double roll,
                      float qw, double qx, double qy, double qz
                      );
+    void sendGraphData(double ax, double ay, double az,
+                     double gx, double gy, double gz,
+                     double mx, double my, double mz,
+                     double yaw, double pitch, double roll
+                     );
 
 
 public:

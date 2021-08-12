@@ -101,7 +101,11 @@ private slots:
     void on_browseButton_clicked();
 
     void on_disableSavingButton_clicked();
-
+    void updateGraphs(double ax, double ay, double az,
+                      double gx, double gy, double gz,
+                      double mx, double my, double mz,
+                      double yaw, double pitch, double roll
+                      );
 private:
     void initActionsConnections();
     QWidget *mainWidget;
@@ -109,6 +113,7 @@ private:
 public:
 
 private:
+    void setupGraphs();
     void showStatusMessage(const QString &message);
 
     Ui::MainWindow *m_ui = nullptr;
@@ -121,6 +126,7 @@ private:
     bool saveQuaternions;
     bool saveRaw;
     bool saveRPY;
+    int key = 0;
 };
 
 #endif // MAINWINDOW_H

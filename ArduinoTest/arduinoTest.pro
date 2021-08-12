@@ -5,7 +5,6 @@ TARGET = arduinoTest
 TEMPLATE = app
 
 SOURCES += \
-    graph2d.cpp \
     main.cpp \
     mainwindow.cpp \
     qcustomplot.cpp \
@@ -15,7 +14,6 @@ SOURCES += \
     viz3D.cpp
 
 HEADERS += \
-    graph2d.h \
     mainwindow.h \
     qcustomplot.h \
     settingsdialog.h \

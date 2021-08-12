@@ -107,9 +107,15 @@ void Console::putData(const QByteArray &data)
 
 //        emit sendQuaternions(qw, qx, qy, qz);
         emit sendRPY(roll, pitch, yaw);
-        emit sendAccelData(ax, ay, az);
-        emit sendGyroData(gx, gy, gz);
-        emit sendMagData(mx, my, mz);
+//        emit sendAccelData(ax, ay, az);
+//        emit sendGyroData(gx, gy, gz);
+//        emit sendMagData(mx, my, mz);
+        emit sendGraphData( ax,  ay,  az,
+                            gx,  gy,  gz,
+                            mx,  my,  mz,
+                            yaw,  pitch,  roll
+                           );
+
         emit sendAllData( ax,  ay,  az,
                           gx,  gy,  gz,
                           mx,  my,  mz,

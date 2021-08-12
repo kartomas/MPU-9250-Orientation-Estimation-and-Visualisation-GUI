@@ -129,7 +129,7 @@
              </layout>
             </item>
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout_6">
+             <layout class="QVBoxLayout" name="verticalLayout_2">
               <property name="spacing">
                <number>0</number>
               </property>
@@ -140,7 +140,7 @@
                <number>0</number>
               </property>
               <item>
-               <widget class="QChartView" name="accelView">
+               <widget class="QCustomPlot" name="accelGraph" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -156,7 +156,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QChartView" name="gyroView">
+               <widget class="QCustomPlot" name="gyroGraph" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -172,7 +172,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QChartView" name="magView">
+               <widget class="QCustomPlot" name="magGraph" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -183,16 +183,6 @@
                  <size>
                   <width>0</width>
                   <height>200</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QWidget" name="widget" native="true">
-                <property name="minimumSize">
-                 <size>
-                  <width>50</width>
-                  <height>50</height>
                  </size>
                 </property>
                </widget>
@@ -553,14 +543,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>QChartView</class>
-   <extends>QGraphicsView</extends>
-   <header>QtCharts</header>
-  </customwidget>
-  <customwidget>
    <class>Viz3D</class>
    <extends>QOpenGLWidget</extends>
    <header>viz3D.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
