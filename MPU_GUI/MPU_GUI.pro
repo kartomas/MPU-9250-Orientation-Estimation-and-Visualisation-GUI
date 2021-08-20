@@ -1,4 +1,4 @@
-QT += widgets serialport charts printsupport
+QT += widgets serialport printsupport
 requires(qtConfig(combobox))
 
 TARGET = MPU_GUI
