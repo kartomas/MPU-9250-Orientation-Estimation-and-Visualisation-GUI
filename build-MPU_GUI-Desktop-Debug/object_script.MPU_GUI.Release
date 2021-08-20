@@ -1,0 +1,15 @@
+release/main.o
+release/mainwindow.o
+release/qcustomplot.o
+release/settingsdialog.o
+release/console.o
+release/geometryengine.o
+release/viz3D.o
+release/qrc_terminal.o
+release/qrc_shaders.o
+release/qrc_textures.o
+release/moc_mainwindow.o
+release/moc_qcustomplot.o
+release/moc_settingsdialog.o
+release/moc_console.o
+release/moc_viz3D.o
