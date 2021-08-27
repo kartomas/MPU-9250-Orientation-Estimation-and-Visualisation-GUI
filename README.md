@@ -17,7 +17,7 @@ The Arduino code is in MPU-9250.ino file (based on [MPU9250BasicAHRS_I2C](https:
 Main Page of the GUI
 </p>
 <p align="center">
-<img src="https://user-images.githubusercontent.com/47836357/130228184-1d1264ac-54b3-4479-831d-4818449db790.jpg"></img></p>
+<img src="https://user-images.githubusercontent.com/47836357/130228184-1d1264ac-54b3-4479-831d-4818449db790.jpg" width="60%"></img></p>
 <p align="center">
 MPU 9250 connected to Arduino Uno
 </p>
